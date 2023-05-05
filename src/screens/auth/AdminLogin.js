@@ -1,10 +1,39 @@
 import React from "react";
+import { useAuthLoginMutation } from "../../redux/api/authService";
 
 const AdminLogin = () => {
+  const [login, response] = useAuthLoginMutation();
+  const errors = response?.error?.data?.errors
+    ? response?.error?.data?.errors
+    : [];
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    const user = {
+      email,
+      password,
+    };
+    login(user);
+  };
+
   return (
     <div className="bg-gray-900 h-screen flex justify-center items-center">
-      <form className="p-5 bg-gray-800 w-10/12 md:w-8/12 lg:w-4/12 rounded-md shadow-md">
+      <form
+        onSubmit={handleLogin}
+        className="p-5 bg-gray-800 w-10/12 md:w-8/12 lg:w-4/12 rounded-md shadow-md"
+      >
         <h2 className="text-xl text-white capitalize mb-3">dashboard login</h2>
+        {errors.length > 0 &&
+          errors.map((error, i) => (
+            <div className="mb-3" key={i}>
+              <p className="bg-red-100 text-red-600 mb-2 p-2 rounded-md">
+                {error.msg}
+              </p>
+            </div>
+          ))}
         <div className="mb-3">
           <input
             type="email"
@@ -24,7 +53,7 @@ const AdminLogin = () => {
         <div className="mb-3">
           <input
             type="submit"
-            value="Login &rarr;"
+            value={response?.isLoading ? "Loading..." : "Login"}
             className="w-full p-2 rounded-md bg-indigo-600 text-white font-semibold uppercase cursor-pointer"
             placeholder="Enter Email..."
           />

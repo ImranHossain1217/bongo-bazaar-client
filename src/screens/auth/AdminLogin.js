@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAuthLoginMutation } from "../../redux/api/authService";
+import { useDispatch } from "react-redux";
+import { setAdminToken } from "../../redux/reducers/authReducer";
+import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
   const [login, response] = useAuthLoginMutation();
   const errors = response?.error?.data?.errors
     ? response?.error?.data?.errors
     : [];
+  const dispatch = useDispatch(); 
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -18,6 +23,14 @@ const AdminLogin = () => {
     };
     login(user);
   };
+
+  useEffect(() => {
+    if (response?.isSuccess) {
+      localStorage.setItem("admin-token", response?.data?.token);
+       dispatch(setAdminToken(response?.data?.token));
+       navigate('/dashboard/products');
+    }
+  }, [response?.isSuccess]);
 
   return (
     <div className="bg-gray-900 h-screen flex justify-center items-center">

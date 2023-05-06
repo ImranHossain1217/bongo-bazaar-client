@@ -1,10 +1,11 @@
 import React from 'react';
+import Sidebar from '../../components/Sidebar';
 
 const Products = () => {
     return (
-        <div>
-            admin products route
-        </div>
+        <>
+           <Sidebar/>
+        </>
     );
 };
 

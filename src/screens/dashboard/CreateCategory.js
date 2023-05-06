@@ -4,10 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import ScreenHeader from "../../components/ScreenHeader";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useCreateMutation } from "../../redux/api/categoryApi";
+import { useDispatch } from "react-redux";
+import { setSuccessMsg } from "../../redux/reducers/globalReducer";
 
 const CreateCategory = () => {
   const [createCategory, response] = useCreateMutation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const errors = response?.error?.data?.errors
     ? response?.error?.data?.errors
     : [];
@@ -21,6 +24,7 @@ const CreateCategory = () => {
 
   useEffect(() => {
     if (response?.isSuccess) {
+      dispatch(setSuccessMsg(response?.data?.msg));
       navigate("/dashboard/categories");
     }
   }, [response?.isSuccess]);
@@ -42,7 +46,7 @@ const CreateCategory = () => {
         {errors.length > 0 &&
           errors.map((error, i) => (
             <div className="mb-3" key={i}>
-              <p className="bg-red-100 text-red-600 mb-2 p-2 rounded-md">
+              <p className="bg-red-100 text-red-600 mb-2 p-2 rounded-md border-l-4 border-red-700">
                 {error.msg}
               </p>
             </div>

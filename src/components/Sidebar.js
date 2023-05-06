@@ -1,6 +1,7 @@
 import React from "react";
 import { FaProductHunt, FaShoppingBag, FaUsers } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
+import { BsCardList } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
 const Sidebar = ({ side, closeSidebar }) => {
@@ -32,6 +33,12 @@ const Sidebar = ({ side, closeSidebar }) => {
           <FaUsers className="mr-2 text-white text-xl" />
           <Link className="text-white capitalize" to="/dashboard/products">
             customers
+          </Link>
+        </li>
+        <li className="flex items-center cursor-pointer transition-all px-4 py-2 hover:bg-gray-600">
+          <BsCardList className="mr-2 text-white text-xl" />
+          <Link className="text-white capitalize" to="/dashboard/categories">
+            categories
           </Link>
         </li>
       </ul>

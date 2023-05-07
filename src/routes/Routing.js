@@ -36,6 +36,14 @@ const Routing = () => {
           }
         ></Route>
         <Route
+          path="/dashboard/categories/:page"
+          element={
+            <Private>
+              <Categories />
+            </Private>
+          }
+        ></Route>
+        <Route
           path="/dashboard/create-category"
           element={
             <Private>

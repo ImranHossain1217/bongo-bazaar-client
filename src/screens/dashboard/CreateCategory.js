@@ -18,7 +18,6 @@ const CreateCategory = () => {
   const handleCategory = (e) => {
     e.preventDefault();
     const name = e.target.category.value;
-    console.log(name);
     createCategory({ name });
   };
 

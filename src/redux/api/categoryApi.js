@@ -4,6 +4,12 @@ const categoryApi = createApi({
   reducerPath: "category",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000/",
+    prepareHeaders: (headers, state) => {
+      const reducer = state.getState();
+      const token = reducer.authReducer.adminToken;
+      headers.set("authorization", token ? `Bearer ${token}` : "");
+      return headers;
+    },
   }),
   endpoints: (builder) => {
     return {
@@ -16,9 +22,17 @@ const categoryApi = createApi({
           };
         },
       }),
+      getCategories: builder.query({
+        query: (page) => {
+          return {
+            url: `/categories/${page}`,
+            method: "GET",
+          };
+        },
+      }),
     };
   },
 });
 
-export const { useCreateMutation } = categoryApi;
+export const { useCreateMutation, useGetCategoriesQuery } = categoryApi;
 export default categoryApi;

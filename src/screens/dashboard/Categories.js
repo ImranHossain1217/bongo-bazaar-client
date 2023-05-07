@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import Wrapper from "./Wrapper";
 import ScreenHeader from "../../components/ScreenHeader";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { removeMsg } from "../../redux/reducers/globalReducer";
+import { useGetCategoriesQuery } from "../../redux/api/categoryApi";
 
 const Categories = () => {
+  const { page } = useParams();
+  const { data = [], isLoading } = useGetCategoriesQuery(page ? page : 1);
   const { success } = useSelector((state) => state.globalReducer);
   const dispatch = useDispatch();
 

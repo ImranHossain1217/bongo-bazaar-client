@@ -6,6 +6,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { removeMsg } from "../../redux/reducers/globalReducer";
 import { useGetCategoriesQuery } from "../../redux/api/categoryApi";
+import Spinner from "../../components/Spinner";
 
 const Categories = () => {
   const { page } = useParams();
@@ -32,6 +33,44 @@ const Categories = () => {
         <p className="bg-green-100 text-green-600 mb-2 p-2 rounded-md border-l-4 border-green-700">
           {success}
         </p>
+      )}
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        data?.categories.length > 0 && (
+          <div>
+            <table className="w-full bg-gray-900 rounded-md">
+              <thead>
+                <tr className="border-b border-gray-800 text-left">
+                  <th className="p-3 uppercase text-gray-500 font-medium">
+                    name
+                  </th>
+                  <th className="p-3 uppercase text-gray-500 font-medium">
+                    edit
+                  </th>
+                  <th className="p-3 uppercase text-gray-500 font-medium">
+                    delete
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {data?.categories?.map((category) => (
+                  <tr className="odd:bg-gray-800" key={category._id}>
+                    <td className="p-3 capitalize font-normal text-gray-100">
+                      {category.name}
+                    </td>
+                    <td className="p-3 capitalize font-normal text-gray-100">
+                      edit
+                    </td>
+                    <td className="p-3 capitalize font-normal text-gray-100">
+                      delete
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
       )}
     </Wrapper>
   );

@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const categoryApi = createApi({
   reducerPath: "category",
+  tagTypes: "categories",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000/",
     prepareHeaders: (headers, state) => {
@@ -21,6 +22,7 @@ const categoryApi = createApi({
             body: name,
           };
         },
+        invalidatesTags: ["categories"],
       }),
       getCategories: builder.query({
         query: (page) => {
@@ -29,6 +31,7 @@ const categoryApi = createApi({
             method: "GET",
           };
         },
+        providesTags: ["categories"],
       }),
     };
   },

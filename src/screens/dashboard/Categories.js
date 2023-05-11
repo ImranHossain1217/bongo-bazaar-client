@@ -7,10 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeMsg } from "../../redux/reducers/globalReducer";
 import { useGetCategoriesQuery } from "../../redux/api/categoryApi";
 import Spinner from "../../components/Spinner";
+import Pagination from "../../components/Pagination";
 
 const Categories = () => {
-  const { page } = useParams();
-  const { data = [], isLoading } = useGetCategoriesQuery(page ? page : 1);
+  let { page } = useParams();
+  if (!page) {
+    page = 1;
+  }
+  const { data = [], isLoading } = useGetCategoriesQuery(page);
   const { success } = useSelector((state) => state.globalReducer);
   const dispatch = useDispatch();
 
@@ -38,38 +42,45 @@ const Categories = () => {
         <Spinner />
       ) : (
         data?.categories.length > 0 && (
-          <div>
-            <table className="w-full bg-gray-900 rounded-md">
-              <thead>
-                <tr className="border-b border-gray-800 text-left">
-                  <th className="p-3 uppercase text-gray-500 font-medium">
-                    name
-                  </th>
-                  <th className="p-3 uppercase text-gray-500 font-medium">
-                    edit
-                  </th>
-                  <th className="p-3 uppercase text-gray-500 font-medium">
-                    delete
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.categories?.map((category) => (
-                  <tr className="odd:bg-gray-800" key={category._id}>
-                    <td className="p-3 capitalize font-normal text-gray-100">
-                      {category.name}
-                    </td>
-                    <td className="p-3 capitalize font-normal text-gray-100">
+          <>
+            <div>
+              <table className="w-full bg-gray-900 rounded-md">
+                <thead>
+                  <tr className="border-b border-gray-800 text-left">
+                    <th className="p-3 uppercase text-gray-500 font-medium">
+                      name
+                    </th>
+                    <th className="p-3 uppercase text-gray-500 font-medium">
                       edit
-                    </td>
-                    <td className="p-3 capitalize font-normal text-gray-100">
+                    </th>
+                    <th className="p-3 uppercase text-gray-500 font-medium">
                       delete
-                    </td>
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {data?.categories?.map((category) => (
+                    <tr className="odd:bg-gray-800" key={category._id}>
+                      <td className="p-3 capitalize font-normal text-gray-100">
+                        {category.name}
+                      </td>
+                      <td className="p-3 capitalize font-normal text-gray-100">
+                        edit
+                      </td>
+                      <td className="p-3 capitalize font-normal text-gray-100">
+                        delete
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <Pagination
+              page={parseInt(page)}
+              perPage={data.perPage}
+              count={data.count}
+            />
+          </>
         )
       )}
     </Wrapper>

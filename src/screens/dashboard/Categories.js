@@ -4,8 +4,11 @@ import ScreenHeader from "../../components/ScreenHeader";
 import { Link, useParams } from "react-router-dom";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { removeMsg } from "../../redux/reducers/globalReducer";
-import { useGetCategoriesQuery } from "../../redux/api/categoryApi";
+import { removeMsg, setSuccessMsg } from "../../redux/reducers/globalReducer";
+import {
+  useDeleteCategoryMutation,
+  useGetCategoriesQuery,
+} from "../../redux/api/categoryApi";
 import Spinner from "../../components/Spinner";
 import Pagination from "../../components/Pagination";
 
@@ -17,6 +20,19 @@ const Categories = () => {
   const { data = [], isFetching } = useGetCategoriesQuery(page);
   const { success } = useSelector((state) => state.globalReducer);
   const dispatch = useDispatch();
+  const [deleteCategory, response] = useDeleteCategoryMutation();
+
+  const handleDeleteCategory = (id) => {
+    if (window.confirm("Are You Sure?")) {
+      deleteCategory(id);
+    }
+  };
+
+  useEffect(() => {
+    if (response?.isSuccess) {
+      dispatch(setSuccessMsg(response?.data?.msg));
+    }
+  }, [response?.isSuccess]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -73,7 +89,12 @@ const Categories = () => {
                         </Link>
                       </td>
                       <td className="p-3 capitalize font-normal text-gray-100">
-                        delete
+                        <button
+                          onClick={() => handleDeleteCategory(category._id)}
+                          className="bg-rose-500 px-5 py-[5px] rounded-md"
+                        >
+                          Delete
+                        </button>
                       </td>
                     </tr>
                   ))}

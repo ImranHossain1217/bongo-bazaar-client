@@ -34,6 +34,15 @@ const categoryApi = createApi({
         },
         invalidatesTags: ["categories"],
       }),
+      deleteCategory: builder.mutation({
+        query: (id) => {
+          return {
+            url: `delete-category/${id}`,
+            method: "DELETE",
+          };
+        },
+        invalidatesTags: ["categories"],
+      }),
       getCategories: builder.query({
         query: (page) => {
           return {
@@ -61,5 +70,6 @@ export const {
   useGetCategoriesQuery,
   useFetchCategoryQuery,
   useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
 } = categoryApi;
 export default categoryApi;

@@ -24,6 +24,16 @@ const categoryApi = createApi({
         },
         invalidatesTags: ["categories"],
       }),
+      updateCategory: builder.mutation({
+        query: (data) => {
+          return {
+            url: `update-category/${data.id}`,
+            method: "PUT",
+            body: { name: data.name },
+          };
+        },
+        invalidatesTags: ["categories"],
+      }),
       getCategories: builder.query({
         query: (page) => {
           return {
@@ -33,9 +43,23 @@ const categoryApi = createApi({
         },
         providesTags: ["categories"],
       }),
+      fetchCategory: builder.query({
+        query: (id) => {
+          return {
+            url: `/fetch-category/${id}`,
+            method: "GET",
+          };
+        },
+        providesTags: ["categories"],
+      }),
     };
   },
 });
 
-export const { useCreateMutation, useGetCategoriesQuery } = categoryApi;
+export const {
+  useCreateMutation,
+  useGetCategoriesQuery,
+  useFetchCategoryQuery,
+  useUpdateCategoryMutation,
+} = categoryApi;
 export default categoryApi;

@@ -14,7 +14,7 @@ const Categories = () => {
   if (!page) {
     page = 1;
   }
-  const { data = [], isLoading } = useGetCategoriesQuery(page);
+  const { data = [], isFetching } = useGetCategoriesQuery(page);
   const { success } = useSelector((state) => state.globalReducer);
   const dispatch = useDispatch();
 
@@ -38,7 +38,7 @@ const Categories = () => {
           {success}
         </p>
       )}
-      {isLoading ? (
+      {isFetching ? (
         <Spinner />
       ) : (
         data?.categories.length > 0 && (
@@ -65,7 +65,12 @@ const Categories = () => {
                         {category.name}
                       </td>
                       <td className="p-3 capitalize font-normal text-gray-100">
-                        edit
+                        <Link
+                          className="bg-orange-400 px-5 py-[5px] rounded-md uppercase"
+                          to={`/dashboard/update-category/${category._id}`}
+                        >
+                          edit
+                        </Link>
                       </td>
                       <td className="p-3 capitalize font-normal text-gray-100">
                         delete

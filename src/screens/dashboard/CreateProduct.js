@@ -3,7 +3,7 @@ import Wrapper from "./Wrapper";
 import ScreenHeader from "../../components/ScreenHeader";
 import { Link } from "react-router-dom";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { useAllCategoriesQuery } from "../../redux/api/categoryApi";
+import { useAllCategoriesQuery, useCreateMutation } from "../../redux/api/categoryApi";
 import Spinner from "../../components/Spinner";
 import { TwitterPicker } from "react-color";
 import { v4 as uuidv4 } from "uuid";
@@ -64,7 +64,7 @@ const CreateProduct = () => {
   };
 
   const handleInput = (e) => {
-    setProducts({ ...products, [e.target.name]: [e.target.value] });
+    setProducts({ ...products, [e.target.name]: e.target.value });
   };
 
   const saveColors = (color) => {
@@ -91,6 +91,21 @@ const CreateProduct = () => {
     const filterSize = sizes.filter((size) => size.name !== sizeName);
     setSizes(filterSize);
   };
+
+  const [createNewProduct,response] = useCreateMutation();
+  console.log(response);
+
+  const handleCreateProduct = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(products));
+    formData.append("desc", description);
+    formData.append("sizes", JSON.stringify(sizes));
+    formData.append("image1", products.image1);
+    formData.append("image2", products.image2);
+    formData.append("image3", products.image3);
+    createNewProduct(formData);
+  };
   return (
     <Wrapper>
       <ScreenHeader>
@@ -102,7 +117,7 @@ const CreateProduct = () => {
         </Link>
       </ScreenHeader>
       <div className="flex flex-wrap">
-        <form className="w-full md:w-8/12">
+        <form onSubmit={handleCreateProduct} className="w-full md:w-8/12">
           <div className="flex flex-wrap">
             <div className="w-full md:w-6/12 p-3">
               <label
